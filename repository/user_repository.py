@@ -17,4 +17,8 @@ class UserRepository:
         )
 
         return self._session.execute(stmt).scalar_one_or_none()
+    
+    async def insert_user(self, user: User):
+        self._session.add(user)
+        self._session.commit()
         

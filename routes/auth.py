@@ -9,3 +9,7 @@ auth_controller = AuthController()
 @router.post("/login")
 async def login(user: dto.requestUserLoginDTO):
     return await auth_controller.login(user=user)
+
+@router.post('/register')
+async def register(new_user: dto.requestUserRegisterDTO):
+    return await auth_controller.register(new_user=new_user)

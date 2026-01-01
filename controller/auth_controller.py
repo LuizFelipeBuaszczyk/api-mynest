@@ -41,6 +41,42 @@ class AuthController:
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 content={
-                    "message": f"Internal Server Error. - {E}"
+                    "message": f"Internal Server Error."
                 }
             )
+        
+    async def register(self, new_user: dto.requestUserRegisterDTO):
+        try:
+            auth_service = AuthService()
+
+            if await auth_service.register_user(user=new_user):
+                return JSONResponse(
+                    status_code=status.HTTP_200_OK,
+                    content={
+                        "message": "Success"
+                    }
+                )
+            else:
+                return JSONResponse(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    content={
+                        "message": "Internal Server Error."
+                    }
+                )
+
+
+        except HTTPException as E:
+            return JSONResponse(
+                status_code=E.status_code,
+                content={
+                    "message": E.detail
+                }
+            )
+        except Exception as E:
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={
+                    "message": f"Internal Server Error."
+                }
+            )
+        
