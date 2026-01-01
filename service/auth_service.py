@@ -12,11 +12,11 @@ class AuthService():
     def __init__(self):
         pass
 
-    def login(self, user: requestUserLoginDTO):
+    async def login(self, user: requestUserLoginDTO):
         
         with Session() as session:
             userRepository = UserRepository(session=session)
-            user_db: User = userRepository.find_user_by_username(user.username)
+            user_db: User = await userRepository.find_user_by_username(user.username)
 
             if not user_db:
                 raise HTTPException(

@@ -8,7 +8,7 @@ class UserRepository:
     def __init__(self, session):
         self._session = session 
 
-    def find_user_by_username(self, username: str) -> User:
+    async def find_user_by_username(self, username: str) -> User:
         stmt = (
             select(User)
             .where(

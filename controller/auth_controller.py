@@ -15,7 +15,7 @@ class AuthController:
         try:
             auth_service = AuthService()
             
-            if auth_service.login(user=user):
+            if await auth_service.login(user=user):
                 return JSONResponse(
                     status_code=status.HTTP_200_OK,
                     content={
