@@ -21,6 +21,6 @@ class User(Base):
     )
 
     password = Column(
-        String(200),
+        String(250),
         nullable=False
     )
