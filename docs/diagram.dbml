@@ -1,0 +1,51 @@
+Table users {
+  id int [primary key]
+  username varchar
+  password varchar
+  email varchar
+  is_superuser bool
+} 
+
+Table roles {
+  id int [primary key]
+  codename varchar
+  description varchar
+} 
+
+Table permissions {
+  id int [primary key]
+  codename varchar
+  description varchar
+}
+
+Table role_permissions {
+  id int [primary key]
+  fk_roles int [ref: > roles.id]
+  fk_permissions int [ref: > permissions.id]
+}
+
+Table groups {
+  id int [primary key]
+  name varchar
+  description varchar
+}
+
+Table Group_Users {
+  id int [primary key]
+  fk_user int [ref: - users.id]
+  fk_group int [ref: - groups.id]
+  fk_roles int [ref: - roles.id]
+}
+
+Table Group_Passwords {
+  id int [primary key]
+  fk_group int [ref: - groups.id]
+  fk_password int [ref: - passwords.id]
+}
+
+Table passwords {
+  id int [primary key]
+  password varchar
+  fk_owner int [ref: - users.id]
+}
+
