@@ -1,9 +1,14 @@
 # API MyNest
-Repositório que contém os aqruivos fonte para a API que integra o Servidor da aplicação MyNest.
 
-# Como Rodar?
+O MyNest é um serviço no qual busca centralizar diversas operações que acontecem em casa, este repositório contém a API do sistema.
 
-1. Instale as Dependências
-```
-pip install -e .
-```
+> O MyNest está em processo inicial de desenvolvimento
+
+# Tecnologias
+
+- Python
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+
+

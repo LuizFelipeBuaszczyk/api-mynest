@@ -22,9 +22,9 @@ POSTGRES_PORT = os.getenv('POSTGRES_PORT', None)
 if not POSTGRES_PORT:
     raise Exception('POSTGRES_PORT NOT DEFINED')
 
-POSTGRES_DATABASE = os.getenv('POSTGRES_DATABASE', None)
+POSTGRES_DATABASE = os.getenv('POSTGRES_DB', None)
 if not POSTGRES_DATABASE:
-    raise Exception('POSTGTRES_DATABASE not defined')
+    raise Exception('POSTGTRES_DB not defined')
 
 engine = create_engine(f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DATABASE}")
 
