@@ -10,4 +10,4 @@ class UserController:
 
     @staticmethod
     async def post_user(data: PostUserDTO):
-       return await UserService.create_user()
+       return await UserService.create_user(data.model_dump())

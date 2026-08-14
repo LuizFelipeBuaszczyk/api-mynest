@@ -1,5 +1,4 @@
 from sqlalchemy import text
-from sqlalchemy.orm import session
 from models.users import Users
 from utils.contextvars import get_session
 
@@ -22,9 +21,9 @@ class UserRepository:
         session = get_session()
         
         user = Users(
-            username="aaa",
-            password="ddd",
-            email="111",
+            username=data['username'],
+            password=data['password'],
+            email=data['email'],
             is_superuser=data['is_superuser']
         )
         session.add(user)
