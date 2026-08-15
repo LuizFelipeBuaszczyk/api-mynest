@@ -19,7 +19,7 @@ class UserService:
     async def create_user(cls, data: dict):
         data['is_superuser'] = False
         
-        data['password'] = cls._encrypt_password(data['password'])
+        data['password'] = encrypt_password(data['password'])
         return await UserRepository.insert_user(**data)
 
    
