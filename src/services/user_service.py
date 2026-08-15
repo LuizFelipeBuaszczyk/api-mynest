@@ -1,9 +1,8 @@
-
 from repositories.user_repository import UserRepository
 
 from utils.encrypt import encrypt_password
 
-from exceptions.user_exceptions import AlreadyExistsSuperuserException
+from exceptions.user_exceptions import AlreadyExistsSuperuserException, AlreadyExistsUserException
 
 class UserService:
     
@@ -22,6 +21,9 @@ class UserService:
         data['is_superuser'] = False
         
         data['password'] = encrypt_password(data['password'])
+        
+        if UserRepository.exists_user_by_username(data['password']):
+            raise AlreadyExistsUserException()
+
         return await UserRepository.insert_user(**data)
 
-   

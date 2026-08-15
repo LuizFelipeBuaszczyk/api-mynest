@@ -18,6 +18,18 @@ class UserRepository:
         return result[0]
 
     @staticmethod
+    async def exists_user_by_username(username: str) -> bool:
+        session = get_session()
+        
+        sql = """
+        select exists (SELECT 1 FROM users WHERE username = :username) 
+        """
+
+        result = session.execute(text(sql), {'username': username}).one()
+        
+        return result[0]
+
+    @staticmethod
     async def insert_user(**data) -> Users:
         session = get_session()
         
