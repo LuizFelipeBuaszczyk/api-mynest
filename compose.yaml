@@ -15,9 +15,12 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - ENCRYPT_KEY=${ENCRYPT_KEY}
+      - SECRET_KEY=${SECRET_KEY}
   postgres:
     container_name: db-mynest
     image: postgres:18
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

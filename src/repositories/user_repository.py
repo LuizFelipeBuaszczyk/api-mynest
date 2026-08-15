@@ -1,4 +1,5 @@
-from sqlalchemy import text
+from sqlalchemy import text, select
+from sqlalchemy.orm import session
 from models.users import Users
 from utils.contextvars import get_session
 
@@ -28,3 +29,10 @@ class UserRepository:
         )
         session.add(user)
         return user
+
+    @staticmethod
+    async def get_user_by_username(username: str) -> Users | None:
+        session = get_session()
+
+        statement = select(Users).where(Users.username == username)
+        return session.execute(statement).scalar_one_or_none()
