@@ -3,6 +3,8 @@ from repositories.user_repository import UserRepository
 
 from utils.encrypt import encrypt_password
 
+from exceptions.user_exceptions import AlreadyExistsSuperuserException
+
 class UserService:
     
     @classmethod
@@ -10,7 +12,7 @@ class UserService:
         data['is_superuser'] = True
         
         if await UserRepository.exists_superuser():
-            raise Exception("Não é possível ter dois super usuários") # TODO Exception especifica
+            raise AlreadyExistsSuperuserException()
         
         data['password'] = encrypt_password(data['password'])
         return await UserRepository.insert_user(**data)

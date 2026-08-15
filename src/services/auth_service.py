@@ -4,6 +4,7 @@ from repositories.user_repository import UserRepository
 
 from utils.encrypt import encrypt_password
 from utils.token import create_auth_token
+from exceptions.auth_exceptions import InvalidCredentialsException
 
 AUTH_TOKEN_EXP = timedelta(minutes=5)
 REFRESH_TOKEN_EXP = timedelta(days=1)
@@ -13,16 +14,16 @@ class AuthService:
     @classmethod
     async def login(cls, data: dict):
         if  "username" not in data:
-            raise Exception("Invalid credentials") #TODO Exception personalizada
+            raise InvalidCredentialsException()
 
         user = await UserRepository.get_user_by_username(data['username'])
         if not user:
-            raise Exception("Invalid credentials") #TODO Exception personalizada
+            raise InvalidCredentialsException()
         
         password_encrypted = encrypt_password(data['password'])
         
         if password_encrypted != user.password:
-            raise Exception("Invalid credentials") #TODO Exception personalizada
+            raise InvalidCredentialsException()
         
         access_token_payload = {
             'type': 'AUTH',
