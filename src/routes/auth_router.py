@@ -3,7 +3,9 @@ from fastapi.routing import APIRouter
 from controllers.auth_controller import AuthController
 from dtos.auth_dto import PostAuthLoginDTO, PostAuthRefreshTokenDTO
 
-router = APIRouter(prefix='/auth')
+TAG = "Auth"
+
+router = APIRouter(prefix='/auth', tags=[TAG])
 
 @router.post('/login')
 async def post_login(payload: PostAuthLoginDTO):
