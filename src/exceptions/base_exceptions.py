@@ -18,3 +18,7 @@ class UnauthorizedException(APPException):
 class BusinessException(APPException):
     default_status_code = 400
     default_detail = "Bad request"
+
+class NotFoundException(APPException):
+    default_status_code = 404
+    default_detail = "Not found"
