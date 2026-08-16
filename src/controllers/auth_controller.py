@@ -1,6 +1,6 @@
 from services.auth_service import AuthService
 
-from dtos.auth_dto import PostAuthLoginDTO, ResponsePostAuthLoginDTO
+from dtos.auth_dto import PostAuthLoginDTO, ResponsePostAuthLoginDTO, PostAuthRefreshTokenDTO, ResponsePostAuthRefreshTokenDTO
 
 class AuthController:
 
@@ -13,4 +13,13 @@ class AuthController:
             refresh_token=response['refresh_token'],
             access_token=response['access_token']
         )
-    
+   
+    @staticmethod
+    async def refresh_token(payload: PostAuthRefreshTokenDTO):
+
+        response = await AuthService.refresh_token(payload.refresh_token)
+        
+        return ResponsePostAuthRefreshTokenDTO(
+            access_token=response
+        )
+        
