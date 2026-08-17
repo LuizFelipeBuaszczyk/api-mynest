@@ -8,10 +8,10 @@ class PasswordController:
     @staticmethod
     async def list_passwords() -> ResponseListPassword:
         response = await PasswordService.list_passwords()
-        print(response)
         return ResponseListPassword(
             data=[ResponseListPasswordObject(
-                id=password.id
+                id=password.id,
+                name=password.name
             ) for password in response]
         )
 
@@ -21,11 +21,13 @@ class PasswordController:
         return ResponseGetPassword(
             id=response.id,
             password=response.password,
+            name=response.name,
+            description=response.description
         )
 
     @staticmethod
     async def post_password(payload: RequestPostPassword):
 
-        response = await PasswordService.post_password(payload.password)
+        response = await PasswordService.post_password(**payload.model_dump())
 
         return ResponsePostPassword()

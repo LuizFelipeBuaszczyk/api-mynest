@@ -29,12 +29,14 @@ class PasswordService:
         return password
 
     @classmethod
-    async def post_password(cls, password: str):
+    async def post_password(cls, **data):
         user_id = get_current_user()
         
         password_data = {
             'fk_owner': user_id,
-            'password': await cls._encrypt_password(password)
+            'password': await cls._encrypt_password(data['password']),
+            'name': data['name'],
+            'description': data['description']
         }
 
         return await PasswordRepository.insert_password(**password_data)

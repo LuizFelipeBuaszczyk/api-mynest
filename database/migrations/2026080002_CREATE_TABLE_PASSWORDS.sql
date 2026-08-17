@@ -1,6 +1,8 @@
 
 CREATE TABLE passwords (
     id INTEGER NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     fk_owner INTEGER NOT NULL
 );
