@@ -1,7 +1,9 @@
 from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
 from models.roles import Roles
 
 from utils.contextvars import get_session
+from exceptions.roles_exception import RolePermissionAlreadyExistsException
 
 class RoleRepository:
 
@@ -45,3 +47,47 @@ class RoleRepository:
 
         session.add(role)
         return role
+
+    @staticmethod
+    async def find_association_permissions(role_id: int, permission_ids: list[int]) -> set[int]:
+        session = get_session()
+
+        if not permission_ids:
+            return set()
+
+        placeholders = ', '.join(f':permission_{i}' for i in range(len(permission_ids)))
+        params = {
+            f'permission_{i}': permission_id
+            for i, permission_id in enumerate(permission_ids)
+        }
+        params['role_id'] = role_id
+
+        sql = f"""
+        SELECT fk_permission FROM role_permissions
+        WHERE fk_role = :role_id AND fk_permission IN ({placeholders})
+        """
+
+        return {row[0] for row in session.execute(text(sql), params)}
+
+    @staticmethod
+    async def insert_role_permissions(role_id: int, permission_ids: list[int]) -> None:
+        session = get_session()
+
+        if not permission_ids:
+            return
+
+        placeholders = ', '.join(f'(:role_id, :permission_{i})' for i in range(len(permission_ids)))
+        params = {
+            f'permission_{i}': permission_id
+            for i, permission_id in enumerate(permission_ids)
+        }
+        params['role_id'] = role_id
+
+        sql = f"""
+        INSERT INTO role_permissions (fk_role, fk_permission) VALUES {placeholders}
+        """
+
+        try:
+            session.execute(text(sql), params)
+        except IntegrityError:
+            raise RolePermissionAlreadyExistsException()

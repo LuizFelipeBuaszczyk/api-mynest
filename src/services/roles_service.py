@@ -1,6 +1,9 @@
 from models.roles import Roles
 from repositories.roles_repository import RoleRepository
-from exceptions.roles_exception import NotFoundRolesException
+from exceptions.roles_exception import (
+    NotFoundRolesException,
+    RolePermissionAlreadyExistsException
+)
 
 class RolesService:
 
@@ -20,3 +23,22 @@ class RolesService:
     @classmethod
     async def post_roles(cls, **data) -> Roles:
         return await RoleRepository.insert_role(**data)
+
+    @classmethod
+    async def post_role_permissions(cls, role_id: int, permission_ids: list[int]) -> None:
+        from services.permissions_service import PermissionsService
+
+        role = await cls.get_role_by_id(role_id)
+        if not role:
+            raise NotFoundRolesException()
+
+        permission_ids = await PermissionsService.exists_permissions_by_id_list(permission_ids)
+
+
+        associated = await RoleRepository.find_association_permissions(role_id, permission_ids)
+        duplicates = [id for id in permission_ids if id in associated]
+
+        if duplicates:
+            raise RolePermissionAlreadyExistsException(detail=f"Permissions already associated: {duplicates}")
+
+        await RoleRepository.insert_role_permissions(role_id, permission_ids)

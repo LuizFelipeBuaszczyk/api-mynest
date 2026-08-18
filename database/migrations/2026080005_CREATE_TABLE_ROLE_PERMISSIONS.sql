@@ -20,3 +20,6 @@ ALTER TABLE role_permissions
 
 ALTER TABLE role_permissions
     ADD CONSTRAINT FK_PERMISSION_ROLE_PERMISSIONS FOREIGN KEY (fk_permission) REFERENCES permissions (id);
+
+ALTER TABLE role_permissions
+    ADD CONSTRAINT UQ_ROLE_PERMISSIONS UNIQUE (fk_role, fk_permission);

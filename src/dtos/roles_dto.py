@@ -18,3 +18,9 @@ class ResponseGetRole(BaseModel):
     id: int
     codename: str
     description: str | None = None
+
+class RequestPostRolePermissions(BaseModel):
+    permission_ids: list[int]
+
+class ResponsePostRolePermissions(BaseModel):
+    message: str = "Permissions assigned to role"
