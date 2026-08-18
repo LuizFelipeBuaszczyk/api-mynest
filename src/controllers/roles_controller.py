@@ -5,7 +5,8 @@ from dtos.roles_dto import (
     ResponseListRoleObject,
     ResponseGetRole,
     RequestPostRolePermissions,
-    ResponsePostRolePermissions
+    ResponsePostRolePermissions,
+    ResponseListRolePermissions
 )
 
 from services.roles_service import RolesService
@@ -42,3 +43,8 @@ class RolesController:
     async def post_role_permissions(id: int, payload: RequestPostRolePermissions) -> ResponsePostRolePermissions:
         await RolesService.post_role_permissions(role_id=id, **payload.model_dump())
         return ResponsePostRolePermissions()
+
+    @staticmethod
+    async def get_role_permissions(id: int) -> ResponseListRolePermissions:
+        response = await RolesService.get_role_permissions(id)
+        return ResponseListRolePermissions(data=response)

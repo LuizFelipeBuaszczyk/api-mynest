@@ -70,6 +70,16 @@ class RoleRepository:
         return {row[0] for row in session.execute(text(sql), params)}
 
     @staticmethod
+    async def list_permissions_by_role_id(role_id: int) -> list[int]:
+        session = get_session()
+
+        sql = """
+        SELECT fk_permission FROM role_permissions WHERE fk_role = :role_id
+        """
+
+        return [row[0] for row in session.execute(text(sql), {'role_id': role_id})]
+
+    @staticmethod
     async def insert_role_permissions(role_id: int, permission_ids: list[int]) -> None:
         session = get_session()
 

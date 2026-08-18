@@ -24,3 +24,6 @@ class RequestPostRolePermissions(BaseModel):
 
 class ResponsePostRolePermissions(BaseModel):
     message: str = "Permissions assigned to role"
+
+class ResponseListRolePermissions(BaseModel):
+    data: list[int]
