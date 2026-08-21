@@ -10,4 +10,5 @@ INSERT INTO permissions (id, codename, description) VALUES
     (9,  'roles.view',     'View roles'),
     (10, 'roles.create',   'Create roles'),
     (11, 'roles.edit',     'Edit roles'),
-    (12, 'roles.delete',   'Delete roles');
+    (12, 'roles.delete',   'Delete roles'),
+    (13, 'permissions.view', 'View permissions');
