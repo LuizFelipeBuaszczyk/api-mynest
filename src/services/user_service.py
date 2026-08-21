@@ -1,4 +1,5 @@
 from repositories.user_repository import UserRepository
+from services.permissions_service import PermissionsService
 
 from utils.encrypt import encrypt_password
 
@@ -18,6 +19,8 @@ class UserService:
 
     @classmethod
     async def create_user(cls, data: dict):
+        await PermissionsService.ensure_permission('users.create')
+
         data['is_superuser'] = False
         
         data['password'] = encrypt_password(data['password'])

@@ -1,1 +1,1 @@
-from . import users, passwords
+from . import users, passwords, user_roles
