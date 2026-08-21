@@ -1,5 +1,6 @@
 from models.roles import Roles
 from repositories.roles_repository import RoleRepository
+from services.permissions_service import PermissionsService
 from exceptions.roles_exception import (
     NotFoundRolesException,
     RolePermissionAlreadyExistsException
@@ -9,10 +10,14 @@ class RolesService:
 
     @classmethod
     async def list_roles(cls) -> list[Roles]:
+        await PermissionsService.ensure_permission('roles.view')
+
         return await RoleRepository.list_roles()
 
     @classmethod
     async def get_role_by_id(cls, id: int) -> Roles:
+        await PermissionsService.ensure_permission('roles.view')
+
         role = await RoleRepository.get_role_by_id(id)
 
         if not role:
@@ -22,11 +27,13 @@ class RolesService:
 
     @classmethod
     async def post_roles(cls, **data) -> Roles:
+        await PermissionsService.ensure_permission('roles.create')
+
         return await RoleRepository.insert_role(**data)
 
     @classmethod
     async def post_role_permissions(cls, role_id: int, permission_ids: list[int]) -> None:
-        from services.permissions_service import PermissionsService
+        await PermissionsService.ensure_permission('roles.edit')
 
         await cls.get_role_by_id(role_id)
 

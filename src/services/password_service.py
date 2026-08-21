@@ -3,6 +3,7 @@ import os
 from models.passwords import Passwords
 from utils.contextvars import get_current_user
 from repositories.password_repository import PasswordRepository
+from services.permissions_service import PermissionsService
 from exceptions.password_exception import NotFoundPasswordException
 
 class PasswordService:
@@ -11,11 +12,15 @@ class PasswordService:
     async def list_passwords(cls):
         user_id = get_current_user()
 
+        await PermissionsService.ensure_permission('passwords.view', user_id)
+
         return await PasswordRepository.list_passwords_by_owner(user_id)
 
     @classmethod
     async def get_password_by_id(cls, id: int) -> Passwords:
         user_id = get_current_user()
+
+        await PermissionsService.ensure_permission('passwords.view', user_id)
 
         password = await PasswordRepository.get_password_by_id(id)
 
@@ -31,6 +36,8 @@ class PasswordService:
     @classmethod
     async def post_password(cls, **data):
         user_id = get_current_user()
+
+        await PermissionsService.ensure_permission('passwords.create', user_id)
         
         password_data = {
             'fk_owner': user_id,
