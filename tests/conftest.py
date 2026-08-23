@@ -1,11 +1,16 @@
+import os
 import pytest
 from fastapi.testclient import TestClient
-from main import app
+
+os.environ['ENVIRONMENT'] = 'TEST'
+from infra.database import Base
 
 @pytest.fixture
 def client():
+    from main import app
     with TestClient(app) as c:
         yield c
+        
 
 pytest_plugins = [
     "fixtures"
