@@ -1,7 +1,7 @@
 import os
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 class Base(DeclarativeBase):
     pass
@@ -9,13 +9,11 @@ class Base(DeclarativeBase):
 TESTING = os.getenv('ENVIRONMENT', 'DEV').upper() == 'TEST'
 
 def create_sqlite_engine():
-    from models import Passwords, Permissions, Roles, UserRoles, Users
+    from models import Passwords, Permissions, Roles, UserRoles, Users, RolePermission
 
-    SQLITE_DATABASE_URL = os.getenv('SQLITE_DATABASE_URL', 'sqlite:///:memory:')
-    engine = create_engine(SQLITE_DATABASE_URL, echo=False)
-    Base.metadata.create_all(bind=engine)
+    SQLITE_DATABASE_URL = 'sqlite:///./test.db'
+    return create_engine(SQLITE_DATABASE_URL, connect_args={"check_same_thread": False})
 
-    return engine
 
 def create_postgresql_egine():
     
@@ -43,3 +41,9 @@ def create_postgresql_egine():
 
 def get_engine():
  return create_sqlite_engine() if TESTING else create_postgresql_egine()
+
+engine = get_engine()
+_session = sessionmaker(bind=get_engine(),)
+
+def get_session():
+    return _session
