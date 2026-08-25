@@ -38,7 +38,7 @@ class PasswordService:
         user_id = get_current_user()
 
         await PermissionsService.ensure_permission('passwords.create', user_id)
-        
+
         password_data = {
             'fk_owner': user_id,
             'password': await cls._encrypt_password(data['password']),

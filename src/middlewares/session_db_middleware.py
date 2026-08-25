@@ -1,16 +1,15 @@
 from fastapi import  Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-from sqlalchemy.orm import sessionmaker
 
-from infra.database import engine
+from infra.database import get_session
 from utils.contextvars import set_session
 
 class SessionDatabaseMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
-        
-        session = sessionmaker(engine)
+       
+        session = get_session()
         with session() as session:
             set_session(session)
 

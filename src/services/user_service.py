@@ -25,7 +25,7 @@ class UserService:
         
         data['password'] = encrypt_password(data['password'])
         
-        if UserRepository.exists_user_by_username(data['password']):
+        if await UserRepository.exists_user_by_username(data['password']):
             raise AlreadyExistsUserException()
 
         return await UserRepository.insert_user(**data)
