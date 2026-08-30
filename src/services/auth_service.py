@@ -1,18 +1,24 @@
+from utils.logger import get_logger
+
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+
 from repositories.user_repository import UserRepository
 
 from utils.encrypt import encrypt_password
 from utils.token import create_auth_token, validate_token
+
 from exceptions.auth_exceptions import InvalidCredentialsException
 
 AUTH_TOKEN_EXP = timedelta(minutes=5)
 REFRESH_TOKEN_EXP = timedelta(days=1)
 
-class AuthService:
+logger = get_logger(__name__)
 
+class AuthService:
     @classmethod
     async def login(cls, data: dict):
+        logger.info("start business rule to login user")
         if  "username" not in data:
             raise InvalidCredentialsException()
 
@@ -45,9 +51,10 @@ class AuthService:
     
     @classmethod
     async def refresh_token(cls, refresh_token: str) -> str:
+        logger.info("start business rule to refresh token")
         token = validate_token(refresh_token) 
         token['type'] = 'AUTH'
         token['exp'] = datetime.now(ZoneInfo('America/Sao_Paulo')) + REFRESH_TOKEN_EXP
 
         return create_auth_token(token)
-                
+

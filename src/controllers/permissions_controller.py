@@ -1,3 +1,5 @@
+from utils.logger import get_logger
+
 from dtos.permissions_dto import (
     ResponseListPermissions,
     ResponseListPermissionObject
@@ -5,12 +7,14 @@ from dtos.permissions_dto import (
 
 from services.permissions_service import PermissionsService
 
+logger = get_logger(__name__)
+
 class PermissionsController:
 
     @staticmethod
     async def list_permissions() -> ResponseListPermissions:
+        logger.info("start listing permissions")
         response = await PermissionsService.list_permissions()
-
         return ResponseListPermissions(
             data=[
                 ResponseListPermissionObject(
@@ -20,3 +24,4 @@ class PermissionsController:
                 ) for permission in response
             ]
         )
+

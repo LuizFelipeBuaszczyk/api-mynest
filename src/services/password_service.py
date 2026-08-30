@@ -1,15 +1,20 @@
 import os
 
+from utils.logger import get_logger
+
 from models.passwords import Passwords
 from utils.contextvars import get_current_user
 from repositories.password_repository import PasswordRepository
 from services.permissions_service import PermissionsService
 from exceptions.password_exception import NotFoundPasswordException
 
+logger = get_logger(__name__)
+
 class PasswordService:
 
     @classmethod
     async def list_passwords(cls):
+        logger.info("start business rule to list passwords")
         user_id = get_current_user()
 
         await PermissionsService.ensure_permission('passwords.view', user_id)
@@ -18,6 +23,7 @@ class PasswordService:
 
     @classmethod
     async def get_password_by_id(cls, id: int) -> Passwords:
+        logger.info("start business rule to get password by id")
         user_id = get_current_user()
 
         await PermissionsService.ensure_permission('passwords.view', user_id)
@@ -35,6 +41,7 @@ class PasswordService:
 
     @classmethod
     async def post_password(cls, **data):
+        logger.info("start business rule to create password")
         user_id = get_current_user()
 
         await PermissionsService.ensure_permission('passwords.create', user_id)
@@ -50,6 +57,7 @@ class PasswordService:
     
     @classmethod
     async def _encrypt_password(cls, password: str) -> str:
+        logger.info("encrypting password")
         from cryptography.fernet import Fernet
         key = os.getenv('ENCRYPT_KEY', None)
         if not key:
@@ -60,6 +68,7 @@ class PasswordService:
 
     @classmethod
     async def _decrypt_password(cls, password: str) -> str:
+        logger.info("decrypting password")
         from cryptography.fernet import Fernet
         key = os.getenv('ENCRYPT_KEY', None)
         if not key:

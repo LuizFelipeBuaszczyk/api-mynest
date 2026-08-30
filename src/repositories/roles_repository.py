@@ -1,3 +1,5 @@
+from utils.logger import get_logger
+
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from models.roles import Roles
@@ -5,10 +7,13 @@ from models.roles import Roles
 from utils.contextvars import get_session
 from exceptions.roles_exception import RolePermissionAlreadyExistsException
 
+logger = get_logger(__name__)
+
 class RoleRepository:
 
     @staticmethod
     async def list_roles() -> list[Roles]:
+        logger.info("selecting roles")
         session = get_session()
 
         sql = """
@@ -19,6 +24,7 @@ class RoleRepository:
 
     @staticmethod
     async def get_role_by_id(id: int) -> Roles | None:
+        logger.info("selecting role by id")
         session = get_session()
 
         sql = """
@@ -38,6 +44,7 @@ class RoleRepository:
 
     @staticmethod
     async def insert_role(**data) -> Roles:
+        logger.info("creating roles in db")
         session = get_session()
 
         role = Roles(
@@ -71,6 +78,7 @@ class RoleRepository:
 
     @staticmethod
     async def list_permissions_by_role_id(role_id: int) -> list[int]:
+        logger.info("selecting permissions by role")
         session = get_session()
 
         sql = """
@@ -81,6 +89,7 @@ class RoleRepository:
 
     @staticmethod
     async def insert_role_permissions(role_id: int, permission_ids: list[int]) -> None:
+        logger.info("creating role_permission association")
         session = get_session()
 
         if not permission_ids:
