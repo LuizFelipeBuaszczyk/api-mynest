@@ -1,14 +1,17 @@
 
-from os import name
+from utils.logger import get_logger
+
 from sqlalchemy import text
-from sqlalchemy.orm import session
 from models.passwords import Passwords
 from utils.contextvars import get_session
+
+logger = get_logger(__name__)
 
 class PasswordRepository:
     
     @staticmethod
     async def list_passwords_by_owner(owner_id: int) -> list[Passwords]:
+        logger.info("selecting all passwords by owner")
         session = get_session()
 
         sql = """
@@ -19,6 +22,7 @@ class PasswordRepository:
 
     @staticmethod
     async def get_password_by_id(id: int) -> Passwords | None:
+        logger.info("select password by id")
         session = get_session()
 
         sql = """
@@ -41,6 +45,7 @@ class PasswordRepository:
 
     @staticmethod
     async def insert_password(**data) -> Passwords:
+        logger.info("insert password data in db")
         session = get_session()
 
         password = Passwords(

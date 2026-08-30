@@ -1,6 +1,8 @@
 from fastapi import Depends
 from fastapi.routing import APIRouter
 
+from utils.logger import get_logger
+
 from dependencies.auth_dependency import auth_token
 from controllers.roles_controller import RolesController
 from dtos.roles_dto import (
@@ -11,9 +13,11 @@ from dtos.roles_dto import (
 TAG = 'Roles'
 
 router = APIRouter(prefix='/roles', tags=[TAG])
+logger = get_logger(__name__)
 
 @router.get("/")
 async def list_roles(auth_user = Depends(auth_token)):
+    logger.info("received a request to list roles")
     return await RolesController.list_roles()
 
 @router.post("/")

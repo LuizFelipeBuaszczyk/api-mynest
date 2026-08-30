@@ -1,12 +1,17 @@
+from utils.logger import get_logger
+
 from sqlalchemy import text
 from models.permissions import Permissions
 
 from utils.contextvars import get_session
 
+logger = get_logger(__name__)
+
 class PermissionRepository:
 
     @staticmethod
     async def list_permissions() -> list[Permissions]:
+        logger.info("creating user in db")
         session = get_session()
 
         sql = """
