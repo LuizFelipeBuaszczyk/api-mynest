@@ -1,0 +1,35 @@
+name: ci-pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  ENVIRONMENT: TEST
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "get code"
+        uses: actions/checkout@v4
+
+      - name: "setup python"
+        uses: actions/setup-python@v7
+
+      - name: "setup uv"
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
+
+      - name: "install dependencies"
+        run: |
+          uv venv
+          uv pip install . --group dev
+
+      - name: "run tests"
+        run: uv run pytest
+
